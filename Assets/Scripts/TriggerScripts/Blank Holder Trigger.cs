@@ -7,7 +7,7 @@ public class BlankHolderTrigger : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Blankable")
+        if (other.CompareTag("Blankable"))
         {
             _InteractableManger.isInHolder = true;
             Debug.Log("Заготовка внутри холдера");
@@ -15,7 +15,7 @@ public class BlankHolderTrigger : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Blankable")
+        if (other.CompareTag("Blankable"))
         {
             _InteractableManger.isInHolder = false;
             Debug.Log("Заготовка снаружи холдера");
