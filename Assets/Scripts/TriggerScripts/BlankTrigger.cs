@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class BlankTririger : MonoBehaviour
+public class BlankTrigger : MonoBehaviour
 {
     [SerializeField] GameObject _swordMesh;
     [SerializeField] float _heatingDuration = 3f;    // Время нагрева до красного
@@ -61,39 +61,33 @@ public class BlankTririger : MonoBehaviour
         _swordGlow.enabled = false;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void StartHeating()
     {
-        if (other.CompareTag("Forge"))
+        // Останавливаем предыдущую корутину, если она запущена
+        if (_heatingCoroutine != null)
         {
-            // Останавливаем предыдущую корутину, если она запущена
-            if (_heatingCoroutine != null)
-            {
-                StopCoroutine(_heatingCoroutine);
-            }
-
-            _isHeating = true;
-
-            // Запускаем корутину нагрева с текущего уровня
-            _heatingCoroutine = StartCoroutine(HeatSwordCoroutine());
-            Debug.Log($"Начало нагрева меча с уровня: {_currentHeatLevel}");
+            StopCoroutine(_heatingCoroutine);
         }
+
+        _isHeating = true;
+
+        // Запускаем корутину нагрева с текущего уровня
+        _heatingCoroutine = StartCoroutine(HeatSwordCoroutine());
+        Debug.Log($"Начало нагрева меча с уровня: {_currentHeatLevel}");
     }
 
-    private void OnTriggerExit(Collider other)
+    public void StartCooling()
     {
-        if (other.CompareTag("Forge"))
+        _isHeating = false;
+
+        // При выходе из горна начинаем охлаждение
+        if (_heatingCoroutine != null)
         {
-            _isHeating = false;
-
-            // При выходе из горна начинаем охлаждение
-            if (_heatingCoroutine != null)
-            {
-                StopCoroutine(_heatingCoroutine);
-            }
-
-            _heatingCoroutine = StartCoroutine(CoolSwordCoroutine());
-            Debug.Log($"Начало охлаждения меча");
+            StopCoroutine(_heatingCoroutine);
         }
+
+        _heatingCoroutine = StartCoroutine(CoolSwordCoroutine());
+        Debug.Log($"Начало охлаждения меча");
     }
 
     private IEnumerator HeatSwordCoroutine()
