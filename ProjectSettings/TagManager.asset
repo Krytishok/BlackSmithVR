@@ -8,6 +8,7 @@ TagManager:
   - Anchor
   - Forge
   - Anvil
+  - Hammer
   layers:
   - Default
   - TransparentFX
