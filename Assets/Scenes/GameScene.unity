@@ -7049,16 +7049,24 @@ PrefabInstance:
       value: Coin  (1)
       objectReference: {fileID: 0}
     - target: {fileID: 6558213538768185349, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558213538768185349, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558213538768185349, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 84.361
+      value: 83.103
       objectReference: {fileID: 0}
     - target: {fileID: 6558213538768185349, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22.514
+      value: 23.397
       objectReference: {fileID: 0}
     - target: {fileID: 6558213538768185349, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 65.585
+      value: 64.17
       objectReference: {fileID: 0}
     - target: {fileID: 6558213538768185349, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
       propertyPath: m_LocalRotation.w
@@ -45287,7 +45295,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 40, y: -23}
-  m_SizeDelta: {x: 0, y: 18}
+  m_SizeDelta: {x: 39.07, y: 18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3651667176175459630
 CanvasRenderer:
@@ -60712,7 +60720,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 40, y: -23}
-  m_SizeDelta: {x: 0, y: 18}
+  m_SizeDelta: {x: 32.34, y: 18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7920315902656762817
 MonoBehaviour:
@@ -61499,7 +61507,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 44.7, y: -23}
-  m_SizeDelta: {x: 0, y: 18}
+  m_SizeDelta: {x: 61.4, y: 18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7920315903891388060
 GameObject:
