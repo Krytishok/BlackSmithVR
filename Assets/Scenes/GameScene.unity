@@ -1563,9 +1563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b344815ef2fdc8d4a830082d5bb98b5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnvilTrigger
-  swordCollider: {fileID: 8911549907009228517}
-  marker: {fileID: 284131040}
-  markerHeightOffset: 0.23
 --- !u!1001 &80761771
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5573,6 +5570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58478272fda91443499d25813cb32719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayAreaBounds
+  box: {fileID: 0}
 --- !u!65 &379132255
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5621,6 +5619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0f02ef9acb5d45788d1693390ec09a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayAreaBounds
+  box: {fileID: 0}
 --- !u!1001 &381027585
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7099,7 +7098,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4208367342505271903, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2102968635}
+    - targetCorrespondingSourceObject: {fileID: 4208367342505271903, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2102968643}
   m_SourcePrefab: {fileID: 100100000, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
 --- !u!1001 &474849596
 PrefabInstance:
@@ -7593,13 +7598,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b9a9711c9e3ee543a24df5a4db7722d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlankTrigger
-  _swordMesh: {fileID: 1850094733}
-  _heatingDuration: 15
-  _overheatDuration: 15
-  _coolingDuration: 20
-  _fire: {fileID: 1387896642}
-  _maxGlowIntensity: 3
-  _overheatGlowIntensity: 5
 --- !u!1001 &502855664
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11107,7 +11105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d68b1b9498823c41a5535eb45a7e542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeadZoneTrigger
-  interactableManager: {fileID: 1125067096}
+  debugLog: 0
 --- !u!65 &774534915
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16168,8 +16166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 140539e01402b9346984197cc7dc69a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableManager
-  _swordBlank: {fileID: 2461589479774522110, guid: 72e1b633383d341429f4dcd5cc9da06d, type: 3}
-  _swordTransform: {fileID: 471917474}
 --- !u!1001 &1136028977
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16602,9 +16598,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa38ba2af9c244da9963254f16eb2f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Billboard
-  target: {fileID: 7726528723035239370}
-  faceCamera: 1
-  invert: 0
 --- !u!114 &1187928653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31014,6 +31007,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PiggyBankUI
   countText: {fileID: 1229699710}
   uiTransform: {fileID: 2015354348}
+  popScale: 1.15
+  popDuration: 0.12
 --- !u!114 &1852300298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31886,10 +31881,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b70c54387a4bd2741ad77b58de97df3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlankTriggerManager
-  _blankTrigger: {fileID: 494513473}
-  _tagForBlankTrigger: Forge
-  _anvilTrigger: {fileID: 73631462}
-  _tagForAnvilTrigger: Anvil
 --- !u!65 &1910486123
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -34100,6 +34091,152 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4607489187838822, guid: 00e2e59cbc04eab4a982218df54ce70b, type: 3}
   m_PrefabInstance: {fileID: 2098261753}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2102968634 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4208367342505271903, guid: a67b351d9cc5442bca8b70e3a70c5142, type: 3}
+  m_PrefabInstance: {fileID: 473189219}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2102968635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102968634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable
+  m_InteractionManager: {fileID: 0}
+  m_Colliders: []
+  m_InteractionLayers:
+    m_Bits: 1
+  m_DistanceCalculationMode: 1
+  m_SelectMode: 0
+  m_FocusMode: 1
+  m_CustomReticle: {fileID: 0}
+  m_AllowGazeInteraction: 0
+  m_AllowGazeSelect: 0
+  m_OverrideGazeTimeToSelect: 0
+  m_GazeTimeToSelect: 0.5
+  m_OverrideTimeToAutoDeselectGaze: 0
+  m_TimeToAutoDeselectGaze: 3
+  m_AllowGazeAssistance: 0
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstFocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastFocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
+  m_StartingInteractionStrengthFilters: []
+  m_AttachTransform: {fileID: 481947886}
+  m_SecondaryAttachTransform: {fileID: 0}
+  m_UseDynamicAttach: 0
+  m_MatchAttachPosition: 1
+  m_MatchAttachRotation: 1
+  m_SnapToColliderVolume: 1
+  m_ReinitializeDynamicAttachEverySingleGrab: 1
+  m_AttachEaseInTime: 0.15
+  m_MovementType: 0
+  m_PredictedVisualsTransform: {fileID: 0}
+  m_VelocityDamping: 1
+  m_VelocityScale: 1
+  m_AngularVelocityDamping: 1
+  m_AngularVelocityScale: 1
+  m_TrackPosition: 1
+  m_SmoothPosition: 0
+  m_SmoothPositionAmount: 8
+  m_TightenPosition: 0.1
+  m_TrackRotation: 1
+  m_SmoothRotation: 0
+  m_SmoothRotationAmount: 8
+  m_TightenRotation: 0.1
+  m_TrackScale: 1
+  m_SmoothScale: 0
+  m_SmoothScaleAmount: 8
+  m_TightenScale: 0.1
+  m_ThrowOnDetach: 1
+  m_ThrowSmoothingDuration: 0.25
+  m_ThrowSmoothingCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_ThrowVelocityScale: 0.6
+  m_ThrowAngularVelocityScale: 1
+  m_ForceGravityOnDetach: 0
+  m_RetainTransformParent: 1
+  m_StartingSingleGrabTransformers: []
+  m_StartingMultipleGrabTransformers: []
+  m_AddDefaultGrabTransformers: 1
+  m_FarAttachMode: 0
+  m_LimitLinearVelocity: 0
+  m_LimitAngularVelocity: 0
+  m_MaxLinearVelocityDelta: 10
+  m_MaxAngularVelocityDelta: 20
+--- !u!114 &2102968643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102968634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94b2887c3235146bb8b963c04e75529a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoinGrabLimiter
+  maxReleaseSpeed: 12
+  maxReleaseAngular: 15
 --- !u!1001 &2115941708
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39897,7 +40034,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e20f5aacdedc7c4db8acb75fc086034, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlankHolderTrigger
-  _InteractableManger: {fileID: 1125067096}
 --- !u!4 &2243211872227540693
 Transform:
   m_ObjectHideFlags: 0
