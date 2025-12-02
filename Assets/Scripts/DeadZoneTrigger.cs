@@ -3,8 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class DeadZoneTrigger : MonoBehaviour
 {
-    [Tooltip("Если true — будет логировать попадания монет в DeadZone")]
-    public bool debugLog = false;
+    [Tooltip("Если true — логировать попадания объектов в DeadZone")] 
+    [SerializeField] private bool debugLog = false;
 
     private void Reset()
     {
@@ -17,28 +17,41 @@ public class DeadZoneTrigger : MonoBehaviour
     {
         if (!other) return;
 
-        // Обрабатываем только монеты
+        // ----- МОЛОТ -----
+        if (other.CompareTag("Hammer"))
+        {
+            HammerRespawn respawn = other.GetComponent<HammerRespawn>();
+            if (respawn != null)
+            {
+                if (debugLog) Debug.Log($"DeadZone: respawn hammer {other.gameObject.name}");
+                respawn.Respawn();
+            }
+            return;
+        }
+
+        // ----- МОНЕТА -----
         if (other.CompareTag("Coin"))
         {
             CoinRespawn coinRespawn = other.GetComponent<CoinRespawn>();
             if (coinRespawn != null)
             {
-                if (debugLog) Debug.Log($"DeadZone: Respawning coin {other.gameObject.name}");
+                if (debugLog) Debug.Log($"DeadZone: respawn coin {other.gameObject.name}");
                 coinRespawn.Respawn();
             }
             else
             {
-                // если скрипт не прикреплён — делаем базовый ресет позиции/скорости
-                if (debugLog) Debug.Log($"DeadZone: Coin without CoinRespawn encountered: {other.gameObject.name}");
+                // если скрипт не прикреплён — просто обнулим скорость и чуть поднимем
+                if (debugLog) Debug.Log($"DeadZone: coin without CoinRespawn {other.gameObject.name}");
                 Rigidbody rb = other.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
                     rb.linearVelocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
                 }
-                // запасной подъём наверх
                 other.transform.position += Vector3.up * 1f;
             }
+            return;
         }
+
     }
 }

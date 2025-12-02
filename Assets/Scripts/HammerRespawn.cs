@@ -1,18 +1,18 @@
 using UnityEngine;
 
-public class CoinRespawn : MonoBehaviour
+public class HammerRespawn : MonoBehaviour
 {
     [SerializeField]
     private Transform returnPoint;
 
     /// <summary>
-    /// Телепортирует монету в заданную точку и сбрасывает скорость.
+    /// Телепортирует молот обратно на слот и сбрасывает скорость.
     /// </summary>
     public void Respawn()
     {
         if (returnPoint == null)
         {
-            Debug.LogWarning("CoinRespawn: returnPoint не задан", this);
+            Debug.LogWarning("HammerRespawn: returnPoint не задан", this);
             return;
         }
 

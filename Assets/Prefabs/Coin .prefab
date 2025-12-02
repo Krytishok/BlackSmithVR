@@ -175,8 +175,4 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c72a8f3db1e384594afa3645fef88a5c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Coin
-  playArea: {fileID: 0}
-  respawnHeight: 1
-  clampPadding: 0.1
-  teleportDistanceThreshold: 5
+  m_EditorClassIdentifier: Assembly-CSharp::CoinRespawn
