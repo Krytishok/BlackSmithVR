@@ -13,6 +13,28 @@ public class DeadZoneTrigger : MonoBehaviour
         if (col != null) col.isTrigger = true;
     }
 
+    private void HandleCoin(Collider other)
+    {
+        CoinRespawn coinRespawn = other.GetComponent<CoinRespawn>();
+        if (coinRespawn != null)
+        {
+            if (debugLog) Debug.Log($"DeadZone: respawn coin {other.gameObject.name}");
+            coinRespawn.Respawn();
+        }
+        else
+        {
+            // если скрипт не прикреплён — просто обнулим скорость и чуть поднимем
+            if (debugLog) Debug.Log($"DeadZone: coin without CoinRespawn {other.gameObject.name}");
+            Rigidbody rb = other.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+            other.transform.position += Vector3.up * 1f;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other) return;
@@ -29,29 +51,22 @@ public class DeadZoneTrigger : MonoBehaviour
             return;
         }
 
-        // ----- МОНЕТА -----
+        // ----- МОНЕТА (при входе в зону) -----
         if (other.CompareTag("Coin"))
         {
-            CoinRespawn coinRespawn = other.GetComponent<CoinRespawn>();
-            if (coinRespawn != null)
-            {
-                if (debugLog) Debug.Log($"DeadZone: respawn coin {other.gameObject.name}");
-                coinRespawn.Respawn();
-            }
-            else
-            {
-                // если скрипт не прикреплён — просто обнулим скорость и чуть поднимем
-                if (debugLog) Debug.Log($"DeadZone: coin without CoinRespawn {other.gameObject.name}");
-                Rigidbody rb = other.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    rb.linearVelocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero;
-                }
-                other.transform.position += Vector3.up * 1f;
-            }
+            HandleCoin(other);
             return;
         }
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other) return;
+
+        // ----- МОНЕТА (при выходе из зоны) -----
+        if (other.CompareTag("Coin"))
+        {
+            HandleCoin(other);
+        }
     }
 }
