@@ -9,6 +9,7 @@ TagManager:
   - Forge
   - Anvil
   - Hammer
+  - Tool
   layers:
   - Default
   - TransparentFX
