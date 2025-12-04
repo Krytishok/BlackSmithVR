@@ -6,9 +6,12 @@ public class AnvilTrigger : MonoBehaviour
     [SerializeField] private Transform endPos;
     [SerializeField] private MarkerScript markerObject; // Объект с маркером
 
+    [SerializeField] private GameObject[] _meshes;
+
 
     private int _hitCounter = 0;
-    private int _possibleHits = 5;
+    private int _possibleHits = 12;
+    private int _meshLevel = 0;
 
     public bool _isWorkDone = false;
 
@@ -39,6 +42,9 @@ public class AnvilTrigger : MonoBehaviour
 
         _hitCounter++;
         Debug.Log($"Ударов сделано: {_hitCounter} Ударов осталось: {_possibleHits - _hitCounter}");
+
+        ValidateMeshLevel();
+
         if(_hitCounter >= _possibleHits)
         {
             _isWorkDone = true;
@@ -55,6 +61,31 @@ public class AnvilTrigger : MonoBehaviour
             markerObject.gameObject.SetActive(true);
         }
         
+    }
+
+    private void ShowMeshByIndex(int index)
+    {
+        if (markerObject != null && index < _meshes.Length)
+        {
+            for(int i = 0;  i < _meshes.Length; i++)
+            {
+                _meshes[i].SetActive(false);
+            }
+            _meshes[index].gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("Меш не изменился, так как index превышает кол-во мешей");
+        }
+    }
+
+    private void ValidateMeshLevel()
+    {
+        if(_hitCounter % 3 == 0)
+        {
+            _meshLevel++;
+            ShowMeshByIndex(_meshLevel);
+        }
     }
 
     private void OnDestroy()
