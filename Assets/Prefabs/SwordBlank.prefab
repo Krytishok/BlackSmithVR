@@ -104,7 +104,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.049999993, y: 1.04, z: 0.8059999}
   m_LocalScale: {x: 1.7118341, y: 0.2863664, z: 0.23862155}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2728462126902623990}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -336,14 +336,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2461589479774522110}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.110532396, w: -0.9938726}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.032054976, y: 0.029442526, z: 0.2509283}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7187641693827875269}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 347.308}
 --- !u!33 &1456137262377389602
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -729,7 +729,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6363969158783634295, guid: 2adb2963f3f7f6643a1c669c1c8b2b3f, type: 3}
       propertyPath: ForceModule.inWorldSpace
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6363969158783634295, guid: 2adb2963f3f7f6643a1c669c1c8b2b3f, type: 3}
+      propertyPath: VelocityModule.inWorldSpace
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8476787734211509900, guid: 2adb2963f3f7f6643a1c669c1c8b2b3f, type: 3}
       propertyPath: m_Name

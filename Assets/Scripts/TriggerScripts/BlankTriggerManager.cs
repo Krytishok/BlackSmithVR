@@ -17,7 +17,7 @@ public class BlankTriggerManager : MonoBehaviour
         }
         else if (other.CompareTag(_tagForAnvilTrigger))
         {
-            _anvilTrigger.TeleportMarkerToRandomEdge();
+            _anvilTrigger.SetActiveMarker();
         }
     }
 

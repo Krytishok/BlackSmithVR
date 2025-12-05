@@ -1,175 +1,98 @@
 using UnityEngine;
-using System.Collections;
 
 public class AnvilTrigger : MonoBehaviour
 {
-    [SerializeField] private Collider swordCollider;
-    [SerializeField] private GameObject marker;
-    [SerializeField] private float markerHeightOffset = 0.1f; // Высота маркера над поверхностью
+    [SerializeField] private Transform startPos;
+    [SerializeField] private Transform endPos;
+    [SerializeField] private MarkerScript markerObject; // Объект с маркером
+
+    [SerializeField] private GameObject[] _meshes;
+
+
+    private int _hitCounter = 0;
+    private int _possibleHits = 12;
+    private int _meshLevel = 0;
+
+    public bool _isWorkDone = false;
 
     private void Start()
     {
-        // Проверяем наличие необходимых компонентов
-        if (swordCollider == null)
+        if (markerObject != null)
         {
-            Debug.LogError("Sword Collider is not assigned in AnvilManager!");
-        }
+            markerObject.OnTriggerActivated += TeleportMarkerObject;
+            markerObject.gameObject.SetActive(false);
 
-        if (marker == null)
-        {
-            Debug.LogError("Marker is not assigned in AnvilManager!");
+            
         }
-
-        // Изначально скрываем маркер
-        if (marker != null)
-            marker.SetActive(false);
     }
 
-    /// <summary>
-    /// Телепортирует маркер на случайную позицию на грани коллайдера меча
-    /// </summary>
-    public void TeleportMarkerToRandomEdge()
+    private void TeleportMarkerObject()
     {
-        if (swordCollider == null || marker == null)
+        if (markerObject == null || _hitCounter >= _possibleHits) return;
+
+
+        // Получаем позицию объекта с маркером
+        Vector3 currentPos = markerObject.gameObject.transform.localPosition;
+
+        // Случайная позиция по X
+        float randomX = Random.Range(startPos.localPosition.x, endPos.localPosition.x);
+
+        // Телепортируем объект с маркером
+        markerObject.TeleportTo(new Vector3(randomX, currentPos.y, currentPos.z));
+
+        _hitCounter++;
+        Debug.Log($"Ударов сделано: {_hitCounter} Ударов осталось: {_possibleHits - _hitCounter}");
+
+        ValidateMeshLevel();
+
+        if(_hitCounter >= _possibleHits)
         {
-            Debug.LogError("Sword Collider or Marker is not assigned!");
-            return;
+            _isWorkDone = true;
+            markerObject.gameObject.SetActive(false);
         }
 
-        Vector3 randomEdgePoint = GetRandomPointOnColliderEdge();
-        PlaceMarker(randomEdgePoint);
     }
 
-    /// <summary>
-    /// Получает случайную точку на грани коллайдера
-    /// </summary>
-    private Vector3 GetRandomPointOnColliderEdge()
+    public void SetActiveMarker()
     {
-        Bounds bounds = swordCollider.bounds;
-
-        // Выбираем случайную грань коллайдера (0-5 для 6 граней бокса)
-        int randomFace = Random.Range(0, 6);
-
-        Vector3 randomPoint = Vector3.zero;
-
-        switch (randomFace)
+        if(!_isWorkDone)
         {
-            case 0: // Верхняя грань (Y max)
-                randomPoint = new Vector3(
-                    Random.Range(bounds.min.x, bounds.max.x),
-                    bounds.max.y,
-                    Random.Range(bounds.min.z, bounds.max.z)
-                );
-                break;
-
-            case 1: // Нижняя грань (Y min)
-                randomPoint = new Vector3(
-                    Random.Range(bounds.min.x, bounds.max.x),
-                    bounds.min.y,
-                    Random.Range(bounds.min.z, bounds.max.z)
-                );
-                break;
-
-            case 2: // Правая грань (X max)
-                randomPoint = new Vector3(
-                    bounds.max.x,
-                    Random.Range(bounds.min.y, bounds.max.y),
-                    Random.Range(bounds.min.z, bounds.max.z)
-                );
-                break;
-
-            case 3: // Левая грань (X min)
-                randomPoint = new Vector3(
-                    bounds.min.x,
-                    Random.Range(bounds.min.y, bounds.max.y),
-                    Random.Range(bounds.min.z, bounds.max.z)
-                );
-                break;
-
-            case 4: // Передняя грань (Z max)
-                randomPoint = new Vector3(
-                    Random.Range(bounds.min.x, bounds.max.x),
-                    Random.Range(bounds.min.y, bounds.max.y),
-                    bounds.max.z
-                );
-                break;
-
-            case 5: // Задняя грань (Z min)
-                randomPoint = new Vector3(
-                    Random.Range(bounds.min.x, bounds.max.x),
-                    Random.Range(bounds.min.y, bounds.max.y),
-                    bounds.min.z
-                );
-                break;
+            _hitCounter = 0;
+            markerObject.gameObject.SetActive(true);
         }
-
-        return randomPoint;
+        
     }
 
-    /// <summary>
-    /// Размещает маркер в указанной позиции с учетом нормали поверхности
-    /// </summary>
-    private void PlaceMarker(Vector3 position)
+    private void ShowMeshByIndex(int index)
     {
-        // Активируем маркер если он был скрыт
-        if (!marker.activeSelf)
-            marker.SetActive(true);
-
-        // Вычисляем нормаль поверхности для правильного размещения маркера
-        Vector3 surfaceNormal = GetSurfaceNormal(position);
-
-        // Позиционируем маркер
-        marker.transform.position = position + surfaceNormal * markerHeightOffset;
-
-        // Ориентируем маркер перпендикулярно поверхности
-        marker.transform.up = surfaceNormal;
-    }
-
-    /// <summary>
-    /// Получает нормаль поверхности в указанной точке
-    /// </summary>
-    private Vector3 GetSurfaceNormal(Vector3 position)
-    {
-        // Используем Raycast для определения нормали поверхности
-        RaycastHit hit;
-        Vector3 rayDirection = Vector3.zero;
-
-        // Определяем направление луча в зависимости от позиции относительно центра коллайдера
-        Vector3 center = swordCollider.bounds.center;
-
-        if (Mathf.Abs(position.x - center.x) > Mathf.Abs(position.y - center.y) &&
-            Mathf.Abs(position.x - center.x) > Mathf.Abs(position.z - center.z))
+        if (markerObject != null && index < _meshes.Length)
         {
-            rayDirection = position.x > center.x ? Vector3.left : Vector3.right;
-        }
-        else if (Mathf.Abs(position.y - center.y) > Mathf.Abs(position.z - center.z))
-        {
-            rayDirection = position.y > center.y ? Vector3.down : Vector3.up;
+            for(int i = 0;  i < _meshes.Length; i++)
+            {
+                _meshes[i].SetActive(false);
+            }
+            _meshes[index].gameObject.SetActive(true);
         }
         else
         {
-            rayDirection = position.z > center.z ? Vector3.back : Vector3.forward;
+            Debug.Log("Меш не изменился, так как index превышает кол-во мешей");
         }
-
-        // Пускаем луч для определения нормали
-        if (Physics.Raycast(position + rayDirection * 0.1f, -rayDirection, out hit, 0.2f))
-        {
-            return hit.normal;
-        }
-
-        // Если Raycast не сработал, возвращаем приблизительную нормаль
-        return Vector3.up;
     }
 
-    /// <summary>
-    /// Для отладки: визуализация границ коллайдера в редакторе
-    /// </summary>
-    private void OnDrawGizmosSelected()
+    private void ValidateMeshLevel()
     {
-        if (swordCollider != null)
+        if(_hitCounter % 3 == 0)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(swordCollider.bounds.center, swordCollider.bounds.size);
+            _meshLevel++;
+            ShowMeshByIndex(_meshLevel);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (markerObject != null)
+        {
+            markerObject.OnTriggerActivated -= TeleportMarkerObject;
         }
     }
 }
