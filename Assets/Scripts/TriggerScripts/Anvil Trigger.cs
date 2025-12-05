@@ -7,6 +7,7 @@ public class AnvilTrigger : MonoBehaviour
     [SerializeField] private MarkerScript markerObject; // Объект с маркером
 
     [SerializeField] private GameObject[] _meshes;
+    private int _currentIndexOfMesh = 0;
 
 
     private int _hitCounter = 0;
@@ -14,6 +15,9 @@ public class AnvilTrigger : MonoBehaviour
     private int _meshLevel = 0;
 
     public bool _isWorkDone = false;
+
+
+    public event System.Action OnMeshChanged;
 
     private void Start()
     {
@@ -63,7 +67,7 @@ public class AnvilTrigger : MonoBehaviour
         
     }
 
-    private void ShowMeshByIndex(int index)
+    public GameObject ShowMeshByIndex(int index = 1000)
     {
         if (markerObject != null && index < _meshes.Length)
         {
@@ -72,19 +76,26 @@ public class AnvilTrigger : MonoBehaviour
                 _meshes[i].SetActive(false);
             }
             _meshes[index].gameObject.SetActive(true);
+            _currentIndexOfMesh = index;
+            return _meshes[index].gameObject;
         }
         else
         {
-            Debug.Log("Меш не изменился, так как index превышает кол-во мешей");
+
+            Debug.Log("Меш не изменился, так как index превышает кол-во мешей или не был определен при вызове функции");
+            return _meshes[_currentIndexOfMesh];
         }
     }
 
     private void ValidateMeshLevel()
     {
-        if(_hitCounter % 3 == 0)
+        if(_hitCounter % 3 == 0 && _hitCounter < _possibleHits)
         {
+
             _meshLevel++;
             ShowMeshByIndex(_meshLevel);
+
+            OnMeshChanged?.Invoke();
         }
     }
 

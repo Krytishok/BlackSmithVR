@@ -7,7 +7,13 @@ public class BlankTriggerManager : MonoBehaviour
 
     [SerializeField] AnvilTrigger _anvilTrigger;
     [SerializeField] string _tagForAnvilTrigger;
+    [SerializeField] float _minHeatValueForMarker;
 
+
+    private void Start()
+    {
+        _anvilTrigger.OnMeshChanged += MeshChange;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -17,7 +23,10 @@ public class BlankTriggerManager : MonoBehaviour
         }
         else if (other.CompareTag(_tagForAnvilTrigger))
         {
-            _anvilTrigger.SetActiveMarker();
+            if(_blankTrigger._currentHeatLevel > _minHeatValueForMarker)
+            {
+                _anvilTrigger.SetActiveMarker();
+            }
         }
     }
 
@@ -27,5 +36,11 @@ public class BlankTriggerManager : MonoBehaviour
         {
             _blankTrigger.StartCooling();
         }
+    }
+
+
+    private void MeshChange()
+    {
+        _blankTrigger.ReplaceSword(_anvilTrigger.ShowMeshByIndex());
     }
 }

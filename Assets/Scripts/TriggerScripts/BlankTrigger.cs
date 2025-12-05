@@ -6,7 +6,7 @@ public class BlankTrigger : MonoBehaviour
     [SerializeField] GameObject _swordMesh;
     [SerializeField] float _heatingDuration = 3f;    // Время нагрева до красного
     [SerializeField] float _overheatDuration = 2f;   // Время перегрева до белого
-    [SerializeField] float _coolingDuration = 5f;    // Время остывания
+    [SerializeField] float _coolingDuration = 60f;   // МАКСИМАЛЬНОЕ время полного остывания
 
     [Header("FX settings")]
     [SerializeField] ParticleSystem _fire;
@@ -17,12 +17,12 @@ public class BlankTrigger : MonoBehaviour
 
     private MeshRenderer _swordMeshRenderer;
     private Coroutine _heatingCoroutine;
-    private Color _originalColor;
+    private Coroutine _coolingCoroutine;
     private Material _swordMaterial;
     private Light _swordGlow;
 
     // Текущее состояние нагрева (0-1: нагрев до красного, 1-2: перегрев до белого)
-    private float _currentHeatLevel = 0f;
+    public float _currentHeatLevel = 0f;
     private bool _isHeating = false;
 
     // Цвета для различных стадий нагрева
@@ -31,11 +31,13 @@ public class BlankTrigger : MonoBehaviour
     private readonly Color _yellowHotColor = new Color(1f, 0.8f, 0.2f);  // Желтый
     private readonly Color _whiteHotColor = new Color(0.8f, 0.8f, 0.8f); // Белый
 
+    public event System.Action OnHeating;
+    public event System.Action OnCooling;
+
     private void Start()
     {
         _swordMeshRenderer = _swordMesh.GetComponent<MeshRenderer>();
         _swordMaterial = _swordMeshRenderer.material;
-        _originalColor = _swordMaterial.color;
 
         // Создаем источник света для свечения
         CreateGlowLight();
@@ -63,31 +65,52 @@ public class BlankTrigger : MonoBehaviour
 
     public void StartHeating()
     {
-        // Останавливаем предыдущую корутину, если она запущена
-        if (_heatingCoroutine != null)
+        // Если уже нагревается, ничего не делаем
+        if (_isHeating) return;
+
+        // Останавливаем охлаждение, если оно активно
+        if (_coolingCoroutine != null)
         {
-            StopCoroutine(_heatingCoroutine);
+            StopCoroutine(_coolingCoroutine);
+            _coolingCoroutine = null;
         }
 
         _isHeating = true;
 
         // Запускаем корутину нагрева с текущего уровня
+        if (_heatingCoroutine != null)
+        {
+            StopCoroutine(_heatingCoroutine);
+        }
+
         _heatingCoroutine = StartCoroutine(HeatSwordCoroutine());
         Debug.Log($"Начало нагрева меча с уровня: {_currentHeatLevel}");
     }
 
     public void StartCooling()
     {
+        if (!_isHeating && _currentHeatLevel <= 0f) return;
+
         _isHeating = false;
 
-        // При выходе из горна начинаем охлаждение
+        // Останавливаем нагрев, если он активен
         if (_heatingCoroutine != null)
         {
             StopCoroutine(_heatingCoroutine);
+            _heatingCoroutine = null;
         }
 
-        _heatingCoroutine = StartCoroutine(CoolSwordCoroutine());
-        Debug.Log($"Начало охлаждения меча");
+        // Рассчитываем фактическое время охлаждения на основе текущего уровня нагрева
+        float actualCoolingTime = CalculateActualCoolingTime(_currentHeatLevel);
+
+        // Запускаем корутину охлаждения
+        if (_coolingCoroutine != null)
+        {
+            StopCoroutine(_coolingCoroutine);
+        }
+
+        _coolingCoroutine = StartCoroutine(CoolSwordCoroutine(actualCoolingTime));
+        Debug.Log($"Начало охлаждения меча. Уровень нагрева: {_currentHeatLevel}, время охлаждения: {actualCoolingTime:F1} секунд");
     }
 
     private IEnumerator HeatSwordCoroutine()
@@ -147,6 +170,17 @@ public class BlankTrigger : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Рассчитывает фактическое время охлаждения на основе текущего уровня нагрева
+    /// </summary>
+    private float CalculateActualCoolingTime(float currentHeatLevel)
+    {
+        // Линейная зависимость: время охлаждения = максимальное время * (текущий уровень / 2)
+        // 2 - максимальный уровень нагрева
+        float coolingMultiplier = currentHeatLevel / 2f;
+        return _coolingDuration * coolingMultiplier;
+    }
+
     private void UpdateVisualEffects(float heatLevel)
     {
         // Обновление цвета материала
@@ -184,7 +218,6 @@ public class BlankTrigger : MonoBehaviour
 
         var main = _fire.main;
         var emission = _fire.emission;
-        var colorOverLifetime = _fire.colorOverLifetime;
 
         // Изменение цвета частиц в зависимости от температуры
         if (heatLevel <= 1f)
@@ -210,7 +243,7 @@ public class BlankTrigger : MonoBehaviour
         main.startSize = Mathf.Lerp(0.1f, 0.3f, heatLevel / 2f);
     }
 
-    private IEnumerator CoolSwordCoroutine()
+    private IEnumerator CoolSwordCoroutine(float actualCoolingTime)
     {
         float elapsedTime = 0f;
         float startHeatLevel = _currentHeatLevel;
@@ -222,10 +255,10 @@ public class BlankTrigger : MonoBehaviour
             emission.rateOverTime = 0f; // Постепенно уменьшаем частицы
         }
 
-        while (elapsedTime < _coolingDuration && _currentHeatLevel > 0f)
+        while (elapsedTime < actualCoolingTime && _currentHeatLevel > 0f)
         {
             elapsedTime += Time.deltaTime;
-            float progress = elapsedTime / _coolingDuration;
+            float progress = elapsedTime / actualCoolingTime;
 
             // Плавное уменьшение уровня нагрева
             _currentHeatLevel = Mathf.Lerp(startHeatLevel, 0f, progress);
@@ -248,18 +281,30 @@ public class BlankTrigger : MonoBehaviour
         }
 
         _swordGlow.enabled = false;
-        Debug.Log($"Меч полностью остыл");
+        _coolingCoroutine = null;
+        Debug.Log($"Меч полностью остыл за {actualCoolingTime:F1} секунд");
     }
 
     // Метод для принудительного охлаждения (можно вызвать извне)
     public void ForceCool()
     {
         _isHeating = false;
+
+        // Останавливаем все корутины
         if (_heatingCoroutine != null)
         {
             StopCoroutine(_heatingCoroutine);
+            _heatingCoroutine = null;
         }
-        _heatingCoroutine = StartCoroutine(CoolSwordCoroutine());
+
+        if (_coolingCoroutine != null)
+        {
+            StopCoroutine(_coolingCoroutine);
+        }
+
+        // Рассчитываем время охлаждения и запускаем
+        float actualCoolingTime = CalculateActualCoolingTime(_currentHeatLevel);
+        _coolingCoroutine = StartCoroutine(CoolSwordCoroutine(actualCoolingTime));
     }
 
     // Метод для проверки текущей температуры
@@ -278,5 +323,177 @@ public class BlankTrigger : MonoBehaviour
         {
             _swordGlow.enabled = true;
         }
+        else
+        {
+            _swordGlow.enabled = false;
+        }
+    }
+
+    /// <summary>
+    /// Рассчитывает оставшееся время полного остывания при текущем уровне нагрева
+    /// </summary>
+    public float GetRemainingCoolingTime()
+    {
+        return CalculateActualCoolingTime(_currentHeatLevel);
+    }
+
+    /// <summary>
+    /// Заменяет текущий MeshRenderer на новый и применяет текущий уровень нагрева
+    /// </summary>
+    public void ChangeMeshRenderer(GameObject newMeshObject)
+    {
+        if (newMeshObject == null)
+        {
+            Debug.LogError("Новый меш не может быть null!");
+            return;
+        }
+
+        // Получаем новый MeshRenderer
+        MeshRenderer newMeshRenderer = newMeshObject.GetComponent<MeshRenderer>();
+        if (newMeshRenderer == null)
+        {
+            Debug.LogError("Новый объект не содержит MeshRenderer!");
+            return;
+        }
+
+        // Сохраняем текущее состояние
+        float currentHeatLevel = _currentHeatLevel;
+        bool wasHeating = _isHeating;
+
+        // Останавливаем текущие корутины
+        if (_heatingCoroutine != null)
+        {
+            StopCoroutine(_heatingCoroutine);
+            _heatingCoroutine = null;
+        }
+
+        if (_coolingCoroutine != null)
+        {
+            StopCoroutine(_coolingCoroutine);
+            _coolingCoroutine = null;
+        }
+
+        // Обновляем ссылки
+        _swordMesh = newMeshObject;
+        _swordMeshRenderer = newMeshRenderer;
+        _swordMaterial = _swordMeshRenderer.material;
+
+
+        // Применяем текущий уровень нагрева к новому материалу
+        SetHeatLevel(currentHeatLevel);
+
+        // Если был процесс нагрева, возобновляем его
+        if (wasHeating)
+        {
+            StartHeating();
+        }
+        else if (currentHeatLevel > 0f)
+        {
+            // Если меш горячий, но не нагревается в данный момент, запускаем охлаждение
+            StartCooling();
+        }
+
+        Debug.Log($"MeshRenderer заменен. Текущий уровень нагрева: {currentHeatLevel}");
+    }
+
+    /// <summary>
+    /// Перегруженная версия метода для смены только материала
+    /// </summary>
+    public void ChangeMaterial(Material newMaterial)
+    {
+        if (newMaterial == null)
+        {
+            Debug.LogError("Новый материал не может быть null!");
+            return;
+        }
+
+        // Сохраняем текущее состояние
+        float currentHeatLevel = _currentHeatLevel;
+
+        // Обновляем материал
+        _swordMaterial = newMaterial;
+        _swordMeshRenderer.material = _swordMaterial;
+
+        // Применяем текущий уровень нагрева к новому материалу
+        SetHeatLevel(currentHeatLevel);
+
+        Debug.Log($"Материал заменен. Текущий уровень нагрева: {currentHeatLevel}");
+    }
+
+    /// <summary>
+    /// Полностью заменяет меч на новый GameObject с сохранением трансформа и нагрева
+    /// </summary>
+    public void ReplaceSword(GameObject newSwordPrefab)
+    {
+        if (newSwordPrefab == null)
+        {
+            Debug.LogError("Префаб нового меча не может быть null!");
+            return;
+        }
+
+        // Сохраняем текущее состояние и трансформацию
+        float currentHeatLevel = _currentHeatLevel;
+        bool wasHeating = _isHeating;
+
+
+        // Останавливаем текущие корутины
+        if (_heatingCoroutine != null)
+        {
+            StopCoroutine(_heatingCoroutine);
+            _heatingCoroutine = null;
+        }
+
+        if (_coolingCoroutine != null)
+        {
+            StopCoroutine(_coolingCoroutine);
+            _coolingCoroutine = null;
+        }
+
+
+        // Применяем изменения к новому мешу
+        ChangeMeshRenderer(newSwordPrefab);
+
+        // Если был процесс нагрева, возобновляем его
+        if (wasHeating)
+        {
+            StartHeating();
+        }
+
+        Debug.Log($"Меш полностью заменен. Текущий уровень нагрева: {currentHeatLevel}");
+    }
+
+    /// <summary>
+    /// Обновляет ссылку на текущий меш (без уничтожения старого)
+    /// </summary>
+    public void UpdateMeshReference(GameObject newMeshObject)
+    {
+        if (newMeshObject == null)
+        {
+            Debug.LogError("Новый меш не может быть null!");
+            return;
+        }
+
+        // Сохраняем текущее состояние
+        float currentHeatLevel = _currentHeatLevel;
+
+        // Обновляем ссылку
+        _swordMesh = newMeshObject;
+        _swordMeshRenderer = _swordMesh.GetComponent<MeshRenderer>();
+
+        // Если у нового меша нет материала, создаем новый
+        if (_swordMeshRenderer.material == null)
+        {
+            _swordMaterial = new Material(Shader.Find("Standard"));
+            _swordMeshRenderer.material = _swordMaterial;
+        }
+        else
+        {
+            _swordMaterial = _swordMeshRenderer.material;
+        }
+
+        // Применяем текущий уровень нагрева
+        SetHeatLevel(currentHeatLevel);
+
+        Debug.Log($"Ссылка на меш обновлена. Текущий уровень нагрева: {currentHeatLevel}");
     }
 }
