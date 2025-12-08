@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 1133963453203211213}
   m_Layer: 0
   m_Name: Hammer_3
-  m_TagString: Untagged
+  m_TagString: Hammer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
