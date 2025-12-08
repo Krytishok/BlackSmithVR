@@ -9,6 +9,8 @@ public class BlankTriggerManager : MonoBehaviour
     [SerializeField] string _tagForAnvilTrigger;
     [SerializeField] float _minHeatValueForMarker;
 
+    [SerializeField] string _tagForBarrel;
+
 
     private void Start()
     {
@@ -27,6 +29,9 @@ public class BlankTriggerManager : MonoBehaviour
             {
                 _anvilTrigger.SetActiveMarker();
             }
+        } else if (other.CompareTag(_tagForBarrel))
+        {
+            _blankTrigger.AccelerateCooling();
         }
     }
 

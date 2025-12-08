@@ -10,6 +10,7 @@ public class BlankTrigger : MonoBehaviour
 
     [Header("FX settings")]
     [SerializeField] ParticleSystem _fire;
+    [SerializeField] ParticleSystem _steam;
 
     [Header("Glow Settings")]
     [SerializeField] float _maxGlowIntensity = 3f;
@@ -495,5 +496,112 @@ public class BlankTrigger : MonoBehaviour
         SetHeatLevel(currentHeatLevel);
 
         Debug.Log($"Ссылка на меш обновлена. Текущий уровень нагрева: {currentHeatLevel}");
+    }
+
+
+    /// <summary>
+    /// Ускоряет остывание до указанного времени
+    /// </summary>
+    /// <param name="targetCoolingTime">Целевое время охлаждения в секундах (по умолчанию 2)</param>
+    /// <param name="useSmoothTransition">Использовать плавный переход (true) или линейный (false)</param>
+    public void AccelerateCooling(float targetCoolingTime = 2f, bool useSmoothTransition = true)
+    {
+        // Останавливаем текущее охлаждение, если оно активно
+        if (_coolingCoroutine != null)
+        {
+            StopCoroutine(_coolingCoroutine);
+            _coolingCoroutine = null;
+        }
+
+        // Если идет нагрев, останавливаем его
+        if (_isHeating)
+        {
+            _isHeating = false;
+            if (_heatingCoroutine != null)
+            {
+                StopCoroutine(_heatingCoroutine);
+                _heatingCoroutine = null;
+            }
+        }
+
+        // Проверяем корректность времени
+        if (targetCoolingTime <= 0f)
+        {
+            Debug.LogWarning($"Некорректное время охлаждения: {targetCoolingTime}. Используется минимальное значение: 0.1f");
+            targetCoolingTime = 0.1f;
+        }
+
+        if(_currentHeatLevel <= 0.1f)
+        {
+            Debug.Log("Ничего не происходит, потому что заготовка уже остыла");
+            return;
+        }
+
+        // Запускаем ускоренное охлаждение
+        _steam.Play();
+        _coolingCoroutine = StartCoroutine(AcceleratedCoolingCoroutine(targetCoolingTime, useSmoothTransition));
+        Debug.Log($"Запущено ускоренное охлаждение за {targetCoolingTime} секунд. Текущий уровень нагрева: {_currentHeatLevel}");
+    }
+
+    private IEnumerator AcceleratedCoolingCoroutine(float targetCoolingTime, bool useSmoothTransition)
+    {
+        float elapsedTime = 0f;
+        float startHeatLevel = _currentHeatLevel;
+
+        // Обновляем систему частиц для охлаждения
+        if (_fire != null)
+        {
+            var emission = _fire.emission;
+            emission.rateOverTime = 0f; // Быстро уменьшаем частицы
+        }
+
+        while (elapsedTime < targetCoolingTime && _currentHeatLevel > 0f)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / targetCoolingTime;
+
+            float easedProgress;
+            if (useSmoothTransition)
+            {
+                // Используем квадратичную интерполяцию для более быстрого охлаждения в начале
+                easedProgress = Mathf.SmoothStep(0f, 1f, progress);
+            }
+            else
+            {
+                // Линейное охлаждение
+                easedProgress = progress;
+            }
+
+            // Плавное уменьшение уровня нагрева
+            _currentHeatLevel = Mathf.Lerp(startHeatLevel, 0f, easedProgress);
+
+            // Применяем визуальные эффекты
+            UpdateVisualEffects(_currentHeatLevel);
+
+            // Динамически уменьшаем частицы в зависимости от прогресса
+            if (_fire != null)
+            {
+                var emission = _fire.emission;
+                float particleProgress = 1f - Mathf.Clamp01(elapsedTime / (targetCoolingTime * 0.5f));
+                emission.rateOverTime = Mathf.Lerp(0f, 20f, particleProgress);
+            }
+
+            yield return null;
+        }
+
+        // Финальное состояние охлаждения
+        _currentHeatLevel = 0f;
+        UpdateVisualEffects(0f);
+
+        if (_fire != null)
+        {
+            _fire.Stop();
+            var emission = _fire.emission;
+            emission.enabled = false;
+        }
+
+        _swordGlow.enabled = false;
+        _coolingCoroutine = null;
+        Debug.Log($"Заготовка полностью остыла за {targetCoolingTime} секунд (ускоренное охлаждение)");
     }
 }
