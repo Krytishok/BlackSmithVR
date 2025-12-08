@@ -4,13 +4,23 @@ public class DeadZoneTrigger : MonoBehaviour
 {
     [SerializeField] InteractableManager interactableManager;
     private void OnTriggerEnter(Collider other)
+{
+    if (other.CompareTag("Hammer"))
     {
-        if(other.tag == "Blankable")
+        HammerRespawn respawn = other.GetComponent<HammerRespawn>();
+        if (respawn != null)
         {
+            respawn.Respawn();
+        }
+        return;
+    }
+
+    if (other.CompareTag("Blankable"))
+    {
             
             interactableManager.SpawBlank();
             Destroy(other.gameObject, 3f);
-            Debug.Log("Предмет вылетел из игровой зоны");
+            Debug.Log("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
         }
     }
 }
