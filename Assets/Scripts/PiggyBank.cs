@@ -36,6 +36,16 @@ public class PiggyBank : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Coin")) return;
+
+        // Монету засчитываем только если она действительно падает в копилку сверху
+        Rigidbody coinRb = other.attachedRigidbody;
+        if (coinRb != null)
+        {
+            // Если монета летит вверх или почти не двигается по вертикали — не считаем
+            if (coinRb.linearVelocity.y >= -0.01f)
+                return;
+        }
+
         InsertCoin(other.gameObject);
     }
 
