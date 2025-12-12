@@ -10,6 +10,7 @@ TagManager:
   - Anvil
   - Hammer
   - Barrel
+  - Guard
   layers:
   - Default
   - TransparentFX
