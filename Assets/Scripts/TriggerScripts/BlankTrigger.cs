@@ -4,9 +4,9 @@ using System.Collections;
 public class BlankTrigger : MonoBehaviour
 {
     [SerializeField] GameObject _swordMesh;
-    [SerializeField] float _heatingDuration = 3f;    // Время нагрева до красного
-    [SerializeField] float _overheatDuration = 2f;   // Время перегрева до белого
-    [SerializeField] float _coolingDuration = 60f;   // МАКСИМАЛЬНОЕ время полного остывания
+    [SerializeField] float _heatingDuration = 3f;    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    [SerializeField] float _overheatDuration = 2f;   // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    [SerializeField] float _coolingDuration = 60f;   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
     [Header("FX settings")]
     [SerializeField] ParticleSystem _fire;
@@ -22,15 +22,15 @@ public class BlankTrigger : MonoBehaviour
     private Material _swordMaterial;
     private Light _swordGlow;
 
-    // Текущее состояние нагрева (0-1: нагрев до красного, 1-2: перегрев до белого)
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (0-1: пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 1-2: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
     public float _currentHeatLevel = 0f;
     private bool _isHeating = false;
 
-    // Цвета для различных стадий нагрева
-    private readonly Color _coldMetalColor = new Color(0.5f, 0.5f, 0.5f); // Серый металл
-    private readonly Color _redHotColor = new Color(1f, 0.3f, 0.1f);     // Красный
-    private readonly Color _yellowHotColor = new Color(1f, 0.8f, 0.2f);  // Желтый
-    private readonly Color _whiteHotColor = new Color(0.8f, 0.8f, 0.8f); // Белый
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    private readonly Color _coldMetalColor = new Color(0.5f, 0.5f, 0.5f); // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    private readonly Color _redHotColor = new Color(1f, 0.3f, 0.1f);     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    private readonly Color _yellowHotColor = new Color(1f, 0.8f, 0.2f);  // пїЅпїЅпїЅпїЅпїЅпїЅ
+    private readonly Color _whiteHotColor = new Color(0.8f, 0.8f, 0.8f); // пїЅпїЅпїЅпїЅпїЅ
 
     public event System.Action OnHeating;
     public event System.Action OnCooling;
@@ -40,13 +40,13 @@ public class BlankTrigger : MonoBehaviour
         _swordMeshRenderer = _swordMesh.GetComponent<MeshRenderer>();
         _swordMaterial = _swordMeshRenderer.material;
 
-        // Создаем источник света для свечения
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         CreateGlowLight();
 
-        // Устанавливаем исходный холодный цвет
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         _swordMaterial.color = _coldMetalColor;
 
-        // Инициализируем систему частиц
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         if (_fire != null)
         {
             var emission = _fire.emission;
@@ -66,10 +66,10 @@ public class BlankTrigger : MonoBehaviour
 
     public void StartHeating()
     {
-        // Если уже нагревается, ничего не делаем
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         if (_isHeating) return;
 
-        // Останавливаем охлаждение, если оно активно
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_coolingCoroutine != null)
         {
             StopCoroutine(_coolingCoroutine);
@@ -78,14 +78,14 @@ public class BlankTrigger : MonoBehaviour
 
         _isHeating = true;
 
-        // Запускаем корутину нагрева с текущего уровня
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         if (_heatingCoroutine != null)
         {
             StopCoroutine(_heatingCoroutine);
         }
 
         _heatingCoroutine = StartCoroutine(HeatSwordCoroutine());
-        Debug.Log($"Начало нагрева меча с уровня: {_currentHeatLevel}");
+        Debug.Log($"пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: {_currentHeatLevel}");
     }
 
     public void StartCooling()
@@ -94,24 +94,24 @@ public class BlankTrigger : MonoBehaviour
 
         _isHeating = false;
 
-        // Останавливаем нагрев, если он активен
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_heatingCoroutine != null)
         {
             StopCoroutine(_heatingCoroutine);
             _heatingCoroutine = null;
         }
 
-        // Рассчитываем фактическое время охлаждения на основе текущего уровня нагрева
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         float actualCoolingTime = CalculateActualCoolingTime(_currentHeatLevel);
 
-        // Запускаем корутину охлаждения
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_coolingCoroutine != null)
         {
             StopCoroutine(_coolingCoroutine);
         }
 
         _coolingCoroutine = StartCoroutine(CoolSwordCoroutine(actualCoolingTime));
-        Debug.Log($"Начало охлаждения меча. Уровень нагрева: {_currentHeatLevel}, время охлаждения: {actualCoolingTime:F1} секунд");
+        Debug.Log($"пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {_currentHeatLevel}, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {actualCoolingTime:F1} пїЅпїЅпїЅпїЅпїЅпїЅ");
     }
 
     private IEnumerator HeatSwordCoroutine()
@@ -127,9 +127,9 @@ public class BlankTrigger : MonoBehaviour
 
         float elapsedTime = 0f;
         float startHeatLevel = _currentHeatLevel;
-        float targetHeatLevel = 2f; // Максимальный уровень нагрева (белый)
+        float targetHeatLevel = 2f; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ)
 
-        // Вычисляем оставшееся время нагрева исходя из текущего уровня
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         float remainingHeatingTime = CalculateRemainingHeatingTime(startHeatLevel);
 
         while (_isHeating && _currentHeatLevel < targetHeatLevel)
@@ -137,21 +137,21 @@ public class BlankTrigger : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float progress = elapsedTime / remainingHeatingTime;
 
-            // Обновляем текущий уровень нагрева
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             _currentHeatLevel = Mathf.Lerp(startHeatLevel, targetHeatLevel, progress);
 
-            // Применяем визуальные эффекты based on current heat level
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ based on current heat level
             UpdateVisualEffects(_currentHeatLevel);
 
             yield return null;
         }
 
-        // Если все еще нагреваемся и достигли максимума
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_isHeating)
         {
             _currentHeatLevel = targetHeatLevel;
             UpdateVisualEffects(_currentHeatLevel);
-            Debug.Log($"Меч перегрет до белого каления!");
+            Debug.Log($"пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
         }
     }
 
@@ -159,42 +159,42 @@ public class BlankTrigger : MonoBehaviour
     {
         if (currentHeatLevel < 1f)
         {
-            // На стадии нагрева до красного
+            // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             float remainingProgress = 1f - currentHeatLevel;
             return remainingProgress * _heatingDuration;
         }
         else
         {
-            // На стадии перегрева до белого
+            // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             float remainingProgress = 2f - currentHeatLevel;
             return remainingProgress * _overheatDuration;
         }
     }
 
     /// <summary>
-    /// Рассчитывает фактическое время охлаждения на основе текущего уровня нагрева
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     private float CalculateActualCoolingTime(float currentHeatLevel)
     {
-        // Линейная зависимость: время охлаждения = максимальное время * (текущий уровень / 2)
-        // 2 - максимальный уровень нагрева
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ = пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ * (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ / 2)
+        // 2 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         float coolingMultiplier = currentHeatLevel / 2f;
         return _coolingDuration * coolingMultiplier;
     }
 
     private void UpdateVisualEffects(float heatLevel)
     {
-        // Обновление цвета материала
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (heatLevel <= 1f)
         {
-            // От серого к красному
+            // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             _swordMaterial.color = Color.Lerp(_coldMetalColor, _redHotColor, heatLevel);
             _swordGlow.color = Color.Lerp(Color.red, Color.red, heatLevel);
             _swordGlow.intensity = Mathf.Lerp(0f, _maxGlowIntensity, heatLevel);
         }
         else if (heatLevel <= 1.5f)
         {
-            // От красного к желтому
+            // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             float subProgress = (heatLevel - 1f) * 2f;
             _swordMaterial.color = Color.Lerp(_redHotColor, _yellowHotColor, subProgress);
             _swordGlow.color = Color.Lerp(Color.red, Color.yellow, subProgress);
@@ -202,14 +202,14 @@ public class BlankTrigger : MonoBehaviour
         }
         else
         {
-            // От желтого к белому
+            // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             float subProgress = (heatLevel - 1.5f) * 2f;
             _swordMaterial.color = Color.Lerp(_yellowHotColor, _whiteHotColor, subProgress);
             _swordGlow.color = Color.Lerp(Color.yellow, Color.white, subProgress);
             _swordGlow.intensity = Mathf.Lerp(_maxGlowIntensity, _overheatGlowIntensity, subProgress);
         }
 
-        // Обновление системы частиц
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         UpdateParticleSystem(heatLevel);
     }
 
@@ -220,27 +220,27 @@ public class BlankTrigger : MonoBehaviour
         var main = _fire.main;
         var emission = _fire.emission;
 
-        // Изменение цвета частиц в зависимости от температуры
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (heatLevel <= 1f)
         {
-            // Оранжевые частицы при нормальном нагреве
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             main.startColor = new Color(1f, 0.5f, 0.2f, 0.8f);
             emission.rateOverTime = Mathf.Lerp(0f, 20f, heatLevel);
         }
         else if (heatLevel <= 1.5f)
         {
-            // Желтые частицы при сильном нагреве
+            // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             main.startColor = new Color(1f, 0.8f, 0.3f, 0.9f);
             emission.rateOverTime = Mathf.Lerp(20f, 35f, (heatLevel - 1f) * 2f);
         }
         else
         {
-            // Белые частицы при перегреве
+            // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             main.startColor = new Color(1f, 1f, 1f, 1f);
             emission.rateOverTime = Mathf.Lerp(35f, 50f, (heatLevel - 1.5f) * 2f);
         }
 
-        // Изменение размера частиц
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         main.startSize = Mathf.Lerp(0.1f, 0.3f, heatLevel / 2f);
     }
 
@@ -249,11 +249,11 @@ public class BlankTrigger : MonoBehaviour
         float elapsedTime = 0f;
         float startHeatLevel = _currentHeatLevel;
 
-        // Обновляем систему частиц для охлаждения
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_fire != null)
         {
             var emission = _fire.emission;
-            emission.rateOverTime = 0f; // Постепенно уменьшаем частицы
+            emission.rateOverTime = 0f; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         }
 
         while (elapsedTime < actualCoolingTime && _currentHeatLevel > 0f)
@@ -261,16 +261,16 @@ public class BlankTrigger : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float progress = elapsedTime / actualCoolingTime;
 
-            // Плавное уменьшение уровня нагрева
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             _currentHeatLevel = Mathf.Lerp(startHeatLevel, 0f, progress);
 
-            // Применяем визуальные эффекты
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             UpdateVisualEffects(_currentHeatLevel);
 
             yield return null;
         }
 
-        // Финальное состояние охлаждения
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         _currentHeatLevel = 0f;
         UpdateVisualEffects(0f);
 
@@ -283,15 +283,15 @@ public class BlankTrigger : MonoBehaviour
 
         _swordGlow.enabled = false;
         _coolingCoroutine = null;
-        Debug.Log($"Меч полностью остыл за {actualCoolingTime:F1} секунд");
+        Debug.Log($"пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ {actualCoolingTime:F1} пїЅпїЅпїЅпїЅпїЅпїЅ");
     }
 
-    // Метод для принудительного охлаждения (можно вызвать извне)
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ)
     public void ForceCool()
     {
         _isHeating = false;
 
-        // Останавливаем все корутины
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_heatingCoroutine != null)
         {
             StopCoroutine(_heatingCoroutine);
@@ -303,18 +303,18 @@ public class BlankTrigger : MonoBehaviour
             StopCoroutine(_coolingCoroutine);
         }
 
-        // Рассчитываем время охлаждения и запускаем
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         float actualCoolingTime = CalculateActualCoolingTime(_currentHeatLevel);
         _coolingCoroutine = StartCoroutine(CoolSwordCoroutine(actualCoolingTime));
     }
 
-    // Метод для проверки текущей температуры
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public float GetHeatLevel()
     {
         return _currentHeatLevel;
     }
 
-    // Метод для установки уровня нагрева извне (например, при загрузке состояния)
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
     public void SetHeatLevel(float level)
     {
         _currentHeatLevel = Mathf.Clamp(level, 0f, 2f);
@@ -331,7 +331,7 @@ public class BlankTrigger : MonoBehaviour
     }
 
     /// <summary>
-    /// Рассчитывает оставшееся время полного остывания при текущем уровне нагрева
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public float GetRemainingCoolingTime()
     {
@@ -339,29 +339,29 @@ public class BlankTrigger : MonoBehaviour
     }
 
     /// <summary>
-    /// Заменяет текущий MeshRenderer на новый и применяет текущий уровень нагрева
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ MeshRenderer пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public void ChangeMeshRenderer(GameObject newMeshObject)
     {
         if (newMeshObject == null)
         {
-            Debug.LogError("Новый меш не может быть null!");
+            Debug.LogError("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ null!");
             return;
         }
 
-        // Получаем новый MeshRenderer
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ MeshRenderer
         MeshRenderer newMeshRenderer = newMeshObject.GetComponent<MeshRenderer>();
         if (newMeshRenderer == null)
         {
-            Debug.LogError("Новый объект не содержит MeshRenderer!");
+            Debug.LogError("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MeshRenderer!");
             return;
         }
 
-        // Сохраняем текущее состояние
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         float currentHeatLevel = _currentHeatLevel;
         bool wasHeating = _isHeating;
 
-        // Останавливаем текущие корутины
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_heatingCoroutine != null)
         {
             StopCoroutine(_heatingCoroutine);
@@ -374,70 +374,70 @@ public class BlankTrigger : MonoBehaviour
             _coolingCoroutine = null;
         }
 
-        // Обновляем ссылки
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         _swordMesh = newMeshObject;
         _swordMeshRenderer = newMeshRenderer;
         _swordMaterial = _swordMeshRenderer.material;
 
 
-        // Применяем текущий уровень нагрева к новому материалу
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         SetHeatLevel(currentHeatLevel);
 
-        // Если был процесс нагрева, возобновляем его
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
         if (wasHeating)
         {
             StartHeating();
         }
         else if (currentHeatLevel > 0f)
         {
-            // Если меш горячий, но не нагревается в данный момент, запускаем охлаждение
+            // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             StartCooling();
         }
 
-        Debug.Log($"MeshRenderer заменен. Текущий уровень нагрева: {currentHeatLevel}");
+        Debug.Log($"MeshRenderer пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {currentHeatLevel}");
     }
 
     /// <summary>
-    /// Перегруженная версия метода для смены только материала
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public void ChangeMaterial(Material newMaterial)
     {
         if (newMaterial == null)
         {
-            Debug.LogError("Новый материал не может быть null!");
+            Debug.LogError("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ null!");
             return;
         }
 
-        // Сохраняем текущее состояние
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         float currentHeatLevel = _currentHeatLevel;
 
-        // Обновляем материал
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         _swordMaterial = newMaterial;
         _swordMeshRenderer.material = _swordMaterial;
 
-        // Применяем текущий уровень нагрева к новому материалу
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         SetHeatLevel(currentHeatLevel);
 
-        Debug.Log($"Материал заменен. Текущий уровень нагрева: {currentHeatLevel}");
+        Debug.Log($"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {currentHeatLevel}");
     }
 
     /// <summary>
-    /// Полностью заменяет меч на новый GameObject с сохранением трансформа и нагрева
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ GameObject пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public void ReplaceSword(GameObject newSwordPrefab)
     {
         if (newSwordPrefab == null)
         {
-            Debug.LogError("Префаб нового меча не может быть null!");
+            Debug.LogError("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ null!");
             return;
         }
 
-        // Сохраняем текущее состояние и трансформацию
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         float currentHeatLevel = _currentHeatLevel;
         bool wasHeating = _isHeating;
 
 
-        // Останавливаем текущие корутины
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_heatingCoroutine != null)
         {
             StopCoroutine(_heatingCoroutine);
@@ -451,37 +451,37 @@ public class BlankTrigger : MonoBehaviour
         }
 
 
-        // Применяем изменения к новому мешу
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         ChangeMeshRenderer(newSwordPrefab);
 
-        // Если был процесс нагрева, возобновляем его
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
         if (wasHeating)
         {
             StartHeating();
         }
 
-        Debug.Log($"Меш полностью заменен. Текущий уровень нагрева: {currentHeatLevel}");
+        Debug.Log($"пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {currentHeatLevel}");
     }
 
     /// <summary>
-    /// Обновляет ссылку на текущий меш (без уничтожения старого)
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
     /// </summary>
     public void UpdateMeshReference(GameObject newMeshObject)
     {
         if (newMeshObject == null)
         {
-            Debug.LogError("Новый меш не может быть null!");
+            Debug.LogError("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ null!");
             return;
         }
 
-        // Сохраняем текущее состояние
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         float currentHeatLevel = _currentHeatLevel;
 
-        // Обновляем ссылку
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         _swordMesh = newMeshObject;
         _swordMeshRenderer = _swordMesh.GetComponent<MeshRenderer>();
 
-        // Если у нового меша нет материала, создаем новый
+        // пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         if (_swordMeshRenderer.material == null)
         {
             _swordMaterial = new Material(Shader.Find("Standard"));
@@ -492,28 +492,28 @@ public class BlankTrigger : MonoBehaviour
             _swordMaterial = _swordMeshRenderer.material;
         }
 
-        // Применяем текущий уровень нагрева
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         SetHeatLevel(currentHeatLevel);
 
-        Debug.Log($"Ссылка на меш обновлена. Текущий уровень нагрева: {currentHeatLevel}");
+        Debug.Log($"пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {currentHeatLevel}");
     }
 
 
     /// <summary>
-    /// Ускоряет остывание до указанного времени
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
-    /// <param name="targetCoolingTime">Целевое время охлаждения в секундах (по умолчанию 2)</param>
-    /// <param name="useSmoothTransition">Использовать плавный переход (true) или линейный (false)</param>
+    /// <param name="targetCoolingTime">пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2)</param>
+    /// <param name="useSmoothTransition">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (true) пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (false)</param>
     public void AccelerateCooling(float targetCoolingTime = 2f, bool useSmoothTransition = true)
     {
-        // Останавливаем текущее охлаждение, если оно активно
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_coolingCoroutine != null)
         {
             StopCoroutine(_coolingCoroutine);
             _coolingCoroutine = null;
         }
 
-        // Если идет нагрев, останавливаем его
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
         if (_isHeating)
         {
             _isHeating = false;
@@ -524,23 +524,23 @@ public class BlankTrigger : MonoBehaviour
             }
         }
 
-        // Проверяем корректность времени
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (targetCoolingTime <= 0f)
         {
-            Debug.LogWarning($"Некорректное время охлаждения: {targetCoolingTime}. Используется минимальное значение: 0.1f");
+            Debug.LogWarning($"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {targetCoolingTime}. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: 0.1f");
             targetCoolingTime = 0.1f;
         }
 
         if(_currentHeatLevel <= 0.1f)
         {
-            Debug.Log("Ничего не происходит, потому что заготовка уже остыла");
+            Debug.Log("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
             return;
         }
 
-        // Запускаем ускоренное охлаждение
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         _steam.Play();
         _coolingCoroutine = StartCoroutine(AcceleratedCoolingCoroutine(targetCoolingTime, useSmoothTransition));
-        Debug.Log($"Запущено ускоренное охлаждение за {targetCoolingTime} секунд. Текущий уровень нагрева: {_currentHeatLevel}");
+        Debug.Log($"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ {targetCoolingTime} пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {_currentHeatLevel}");
     }
 
     private IEnumerator AcceleratedCoolingCoroutine(float targetCoolingTime, bool useSmoothTransition)
@@ -548,11 +548,11 @@ public class BlankTrigger : MonoBehaviour
         float elapsedTime = 0f;
         float startHeatLevel = _currentHeatLevel;
 
-        // Обновляем систему частиц для охлаждения
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (_fire != null)
         {
             var emission = _fire.emission;
-            emission.rateOverTime = 0f; // Быстро уменьшаем частицы
+            emission.rateOverTime = 0f; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         }
 
         while (elapsedTime < targetCoolingTime && _currentHeatLevel > 0f)
@@ -563,22 +563,22 @@ public class BlankTrigger : MonoBehaviour
             float easedProgress;
             if (useSmoothTransition)
             {
-                // Используем квадратичную интерполяцию для более быстрого охлаждения в начале
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                 easedProgress = Mathf.SmoothStep(0f, 1f, progress);
             }
             else
             {
-                // Линейное охлаждение
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 easedProgress = progress;
             }
 
-            // Плавное уменьшение уровня нагрева
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             _currentHeatLevel = Mathf.Lerp(startHeatLevel, 0f, easedProgress);
 
-            // Применяем визуальные эффекты
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             UpdateVisualEffects(_currentHeatLevel);
 
-            // Динамически уменьшаем частицы в зависимости от прогресса
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (_fire != null)
             {
                 var emission = _fire.emission;
@@ -589,7 +589,7 @@ public class BlankTrigger : MonoBehaviour
             yield return null;
         }
 
-        // Финальное состояние охлаждения
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         _currentHeatLevel = 0f;
         UpdateVisualEffects(0f);
 
@@ -602,6 +602,6 @@ public class BlankTrigger : MonoBehaviour
 
         _swordGlow.enabled = false;
         _coolingCoroutine = null;
-        Debug.Log($"Заготовка полностью остыла за {targetCoolingTime} секунд (ускоренное охлаждение)");
+        Debug.Log($"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ {targetCoolingTime} пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)");
     }
 }
