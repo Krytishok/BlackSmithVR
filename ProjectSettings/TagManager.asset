@@ -11,6 +11,7 @@ TagManager:
   - Hammer
   - Barrel
   - Guard
+  - CraftTable
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - UI
   - Forge
   - Blank
-  - 
+  - Component
   - 
   - 
   - 
