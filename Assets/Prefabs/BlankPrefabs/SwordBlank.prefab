@@ -80,6 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de443bb4c9f95341bc2e29312d4c2a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CraftManager
+  _marker: {fileID: 6086817960705731388}
   _craftSockets:
   - {fileID: 2231274124990891356}
   - {fileID: 1066138501064586021}
@@ -131,7 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor
   m_InteractionManager: {fileID: 0}
   m_InteractionLayers:
-    m_Bits: 2
+    m_Bits: 16
   m_Handedness: 0
   m_AttachTransform: {fileID: 2134074209846891012}
   m_KeepSelectedTargetValid: 1
@@ -146,7 +147,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2537609738635926664}
+        m_TargetAssemblyTypeName: CraftManager, Assembly-CSharp
+        m_MethodName: SocketSelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -261,7 +274,6 @@ GameObject:
   - component: {fileID: 6929566054279809433}
   - component: {fileID: 8609007730413448045}
   - component: {fileID: 7330057103948971277}
-  - component: {fileID: 2543049601049739350}
   m_Layer: 0
   m_Name: GuardSocket
   m_TagString: Untagged
@@ -299,7 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor
   m_InteractionManager: {fileID: 0}
   m_InteractionLayers:
-    m_Bits: 4294967295
+    m_Bits: 16
   m_Handedness: 0
   m_AttachTransform: {fileID: 1366042397730098800}
   m_KeepSelectedTargetValid: 1
@@ -314,7 +326,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2537609738635926664}
+        m_TargetAssemblyTypeName: CraftManager, Assembly-CSharp
+        m_MethodName: SocketSelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -352,18 +376,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.06055145, y: 0.13765717, z: 0.1}
   m_Center: {x: -0.019724272, y: 0.0008983612, z: 0}
---- !u!114 &2543049601049739350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2231274124990891356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92ac254ccd4c5d04bb6d1104016902a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BlankOnSocketScript
 --- !u!1 &2899094720884392896
 GameObject:
   m_ObjectHideFlags: 0
@@ -5416,7 +5428,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: dbfb2e52dc65280408917041506331fd, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -5820,7 +5832,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 2200233966e64544ca6acb5d473e543f, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

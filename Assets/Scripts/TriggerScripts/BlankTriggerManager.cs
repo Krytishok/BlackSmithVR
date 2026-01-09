@@ -39,11 +39,9 @@ public class BlankTriggerManager : MonoBehaviour
         }
         else if (other.CompareTag(_tagForCraftTable))
         {
-            //Для отладки
-            _craftManager.SetActiveSockets(true);
             if (_anvilTrigger._isWorkDone)
             {
-                _craftManager.SetActiveSockets(true);
+                _craftManager.SetActiveCurrentSocket(true);
             }
         }
         
@@ -54,6 +52,9 @@ public class BlankTriggerManager : MonoBehaviour
         if (other.CompareTag(_tagForBlankTrigger))
         {
             _blankTrigger.StartCooling();
+        } else if (other.CompareTag(_tagForCraftTable))
+        {
+            _craftManager.SetActiveSockets(false);
         }
     }
 

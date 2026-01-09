@@ -37,13 +37,17 @@ public class MarkerScript : MonoBehaviour
         }
     }
 
-    public void TeleportTo(Vector3 _position)
+    public void TeleportTo(Vector3 _position, bool playSound=true)
     {
         gameObject.transform.localPosition = _position;
         Debug.Log($"Объект Marker телепортирован в точку: {_position}");
         _blink.transform.position = _posForBlink;
         _blink.Play();
-        PlaySound();
+        if(playSound )
+        {
+            PlaySound();
+        }
+        
 
     }
 

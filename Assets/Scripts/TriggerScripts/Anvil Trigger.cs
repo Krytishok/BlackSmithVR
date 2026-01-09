@@ -53,6 +53,7 @@ public class AnvilTrigger : MonoBehaviour
         {
             _isWorkDone = true;
             markerObject.gameObject.SetActive(false);
+            markerObject.OnTriggerActivated -= TeleportMarkerObject;
         }
 
     }

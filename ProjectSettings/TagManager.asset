@@ -12,6 +12,7 @@ TagManager:
   - Barrel
   - Guard
   - CraftTable
+  - Handle
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Forge
   - Blank
   - Component
-  - 
+  - CraftSocket
   - 
   - 
   - 
