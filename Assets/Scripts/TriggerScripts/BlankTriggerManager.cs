@@ -9,6 +9,9 @@ public class BlankTriggerManager : MonoBehaviour
     [SerializeField] string _tagForAnvilTrigger;
     [SerializeField] float _minHeatValueForMarker;
 
+    [SerializeField] CraftManager _craftManager;
+    [SerializeField] string _tagForCraftTable = "CraftTable";
+
     [SerializeField] string _tagForBarrel;
 
 
@@ -25,14 +28,23 @@ public class BlankTriggerManager : MonoBehaviour
         }
         else if (other.CompareTag(_tagForAnvilTrigger))
         {
-            if(_blankTrigger._currentHeatLevel > _minHeatValueForMarker)
+            if (_blankTrigger._currentHeatLevel > _minHeatValueForMarker)
             {
                 _anvilTrigger.SetActiveMarker();
             }
-        } else if (other.CompareTag(_tagForBarrel))
+        }
+        else if (other.CompareTag(_tagForBarrel))
         {
             _blankTrigger.AccelerateCooling();
         }
+        else if (other.CompareTag(_tagForCraftTable))
+        {
+            if (_anvilTrigger._isWorkDone)
+            {
+                _craftManager.SetActiveCurrentSocket(true);
+            }
+        }
+        
     }
 
     private void OnTriggerExit(Collider other)
@@ -40,6 +52,9 @@ public class BlankTriggerManager : MonoBehaviour
         if (other.CompareTag(_tagForBlankTrigger))
         {
             _blankTrigger.StartCooling();
+        } else if (other.CompareTag(_tagForCraftTable))
+        {
+            _craftManager.SetActiveSockets(false);
         }
     }
 
