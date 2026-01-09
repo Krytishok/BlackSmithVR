@@ -12,6 +12,9 @@ public class BlankTrigger : MonoBehaviour
     [SerializeField] ParticleSystem _fire;
     [SerializeField] ParticleSystem _steam;
 
+    [Header("Sound settings")]
+    [SerializeField] AudioSource _steamSound;
+
     [Header("Glow Settings")]
     [SerializeField] float _maxGlowIntensity = 3f;
     [SerializeField] float _overheatGlowIntensity = 5f;
@@ -51,7 +54,13 @@ public class BlankTrigger : MonoBehaviour
         {
             var emission = _fire.emission;
             emission.enabled = false;
+            
+            if(_steamSound == null)
+            {
+                _steamSound = _fire.GetComponent<AudioSource>();
+            }
         }
+        
     }
 
     private void CreateGlowLight()
@@ -225,23 +234,23 @@ public class BlankTrigger : MonoBehaviour
         {
             // Оранжевые частицы при нормальном нагреве
             main.startColor = new Color(1f, 0.5f, 0.2f, 0.8f);
-            emission.rateOverTime = Mathf.Lerp(0f, 20f, heatLevel);
+            emission.rateOverTime = Mathf.Lerp(0f, 50f, heatLevel);
         }
         else if (heatLevel <= 1.5f)
         {
             // Желтые частицы при сильном нагреве
             main.startColor = new Color(1f, 0.8f, 0.3f, 0.9f);
-            emission.rateOverTime = Mathf.Lerp(20f, 35f, (heatLevel - 1f) * 2f);
+            emission.rateOverTime = Mathf.Lerp(50f, 100f, (heatLevel - 1f) * 2f);
         }
         else
         {
             // Белые частицы при перегреве
             main.startColor = new Color(1f, 1f, 1f, 1f);
-            emission.rateOverTime = Mathf.Lerp(35f, 50f, (heatLevel - 1.5f) * 2f);
+            emission.rateOverTime = Mathf.Lerp(100f, 150f, (heatLevel - 1.5f) * 2f);
         }
 
         // Изменение размера частиц
-        main.startSize = Mathf.Lerp(0.1f, 0.3f, heatLevel / 2f);
+        main.startSize = Mathf.Lerp(0.2f, 0.4f, heatLevel / 2f);
     }
 
     private IEnumerator CoolSwordCoroutine(float actualCoolingTime)
@@ -504,7 +513,7 @@ public class BlankTrigger : MonoBehaviour
     /// </summary>
     /// <param name="targetCoolingTime">Целевое время охлаждения в секундах (по умолчанию 2)</param>
     /// <param name="useSmoothTransition">Использовать плавный переход (true) или линейный (false)</param>
-    public void AccelerateCooling(float targetCoolingTime = 2f, bool useSmoothTransition = true)
+    public void AccelerateCooling(float targetCoolingTime = 3f, bool useSmoothTransition = true)
     {
         // Останавливаем текущее охлаждение, если оно активно
         if (_coolingCoroutine != null)
@@ -539,6 +548,7 @@ public class BlankTrigger : MonoBehaviour
 
         // Запускаем ускоренное охлаждение
         _steam.Play();
+        _steamSound.Play();
         _coolingCoroutine = StartCoroutine(AcceleratedCoolingCoroutine(targetCoolingTime, useSmoothTransition));
         Debug.Log($"Запущено ускоренное охлаждение за {targetCoolingTime} секунд. Текущий уровень нагрева: {_currentHeatLevel}");
     }
@@ -602,6 +612,7 @@ public class BlankTrigger : MonoBehaviour
 
         _swordGlow.enabled = false;
         _coolingCoroutine = null;
+        _steam.Stop();
         Debug.Log($"Заготовка полностью остыла за {targetCoolingTime} секунд (ускоренное охлаждение)");
     }
 }
