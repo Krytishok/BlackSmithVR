@@ -1,12 +1,16 @@
 using System;
 using UnityEngine;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class CraftManager : MonoBehaviour
 {
     [SerializeField] MarkerScript _marker;
     [SerializeField] GameObject[] _craftSockets;
+
+    private bool _IsFinished = false;
 
     private int _socketsMounted = 0;
 
@@ -27,7 +31,7 @@ public class CraftManager : MonoBehaviour
         {
             for (int i = 0; i < _craftSockets.Length; i++)
             {
-                _craftSockets[i].SetActive(active);
+                //_craftSockets[i].SetActive(active); ¬–≈ћ≈ЌЌќ!
             }
         }
         else
@@ -58,36 +62,39 @@ public class CraftManager : MonoBehaviour
     public void SocketExited()
     {
         _marker.OnTriggerActivated -= ComponentMounted;
-        _marker.gameObject.SetActive(false);
+
+        //_marker.gameObject.SetActive(false);
     }
 
     private void ComponentMounted()
     {
         ApplyComponent();
 
-        _craftSockets[_currentSocket].GetComponent<XRSocketInteractor>().socketActive = false;
+        _marker.PlaySound();
 
-        Destroy(_component);
-
-        _socketsMounted++;
         _marker.gameObject.SetActive(false);
         _currentSocket++;
-        _craftSockets[_currentSocket].SetActive(true);
+        if(_currentSocket < _craftSockets.Length)
+        {
+            _craftSockets[_currentSocket].SetActive(true);
+        }
+        else
+        {
+            _currentSocket = _craftSockets.Length - 1;
+        }
+        
     }
 
-
-    private void ApplyComponent()
+    
+    private void ApplyComponent() // ”дал€ет указанный слой из маски Interaction Layer, сохран€€ остальные слои активными
     {
         //Getting HeldGameObject From Socket
-        _component = _craftSockets[_currentSocket].GetComponent<XRSocketInteractor>().interactablesSelected[0].transform.GetChild(0).gameObject;
+        _component = _craftSockets[_currentSocket].GetComponent<XRSocketInteractor>().interactablesSelected[0].transform.gameObject;
 
+        int maskToRemove = InteractionLayerMask.GetMask("Default");
 
-        _craftSockets[_currentSocket].GetComponentInChildren<MeshFilter>().mesh = _component.GetComponent<MeshFilter>().mesh;
-        _craftSockets[_currentSocket].GetComponentInChildren<MeshRenderer>().materials = _component.GetComponent<MeshRenderer>().materials;
+        _component.GetComponent<XRGrabInteractable>().interactionLayers &= ~maskToRemove;
 
-        _craftSockets[_currentSocket].GetComponentInChildren<Transform>().transform.localPosition = _component.transform.localPosition;
-        _craftSockets[_currentSocket].GetComponentInChildren<Transform>().transform.localRotation = _component.transform.localRotation;
-        _craftSockets[_currentSocket].GetComponentInChildren<Transform>().transform.localScale = _component.transform.localScale;
     }
    
 }

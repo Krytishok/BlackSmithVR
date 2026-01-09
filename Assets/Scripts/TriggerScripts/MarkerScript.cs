@@ -41,8 +41,6 @@ public class MarkerScript : MonoBehaviour
     {
         gameObject.transform.localPosition = _position;
         Debug.Log($"Объект Marker телепортирован в точку: {_position}");
-        _blink.transform.position = _posForBlink;
-        _blink.Play();
         if(playSound )
         {
             PlaySound();
@@ -51,7 +49,7 @@ public class MarkerScript : MonoBehaviour
 
     }
 
-    private void PlaySound()
+    public void PlaySound()
     {
         if (_sounds == null)
         {
@@ -59,6 +57,10 @@ public class MarkerScript : MonoBehaviour
             return;
         }
         _sounds[random.Next(_sounds.Length)].Play();
+
+        _blink.transform.position = _posForBlink;
+        _blink.Play();
+
         Debug.Log($"Звук удара под номером {_sounds.Length}");
     }
 }
