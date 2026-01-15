@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class BlankTriggerManager : MonoBehaviour
 {
@@ -62,5 +63,12 @@ public class BlankTriggerManager : MonoBehaviour
     private void MeshChange()
     {
         _blankTrigger.ReplaceSword(_anvilTrigger.ShowMeshByIndex());
+    }
+
+    public List<string> GetListWithComponents()
+    {
+        List<string> list = _craftManager.craftNames;
+
+        return list;
     }
 }

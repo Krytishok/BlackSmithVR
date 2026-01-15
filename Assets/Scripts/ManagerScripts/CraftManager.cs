@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -10,6 +12,7 @@ public class CraftManager : MonoBehaviour
     [SerializeField] MarkerScript _marker;
     [SerializeField] GameObject[] _craftSockets;
 
+
     private bool _IsFinished = false;
 
     private int _socketsMounted = 0;
@@ -17,6 +20,9 @@ public class CraftManager : MonoBehaviour
     private int _currentSocket = 0;
 
     private GameObject _component;
+
+
+    public List<string> craftNames = new List<string>();
 
 
     private void Start()
@@ -91,9 +97,14 @@ public class CraftManager : MonoBehaviour
         //Getting HeldGameObject From Socket
         _component = _craftSockets[_currentSocket].GetComponent<XRSocketInteractor>().interactablesSelected[0].transform.gameObject;
 
+        craftNames.Add( _component.name );
+        Debug.Log($"Компонент {_component.name} добавлен");
+
         int maskToRemove = InteractionLayerMask.GetMask("Default");
 
         _component.GetComponent<XRGrabInteractable>().interactionLayers &= ~maskToRemove;
+
+        _component.GetComponent<BoxCollider>().isTrigger = true;
 
     }
    
